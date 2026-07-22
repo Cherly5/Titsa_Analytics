@@ -1,0 +1,146 @@
+{
+  "header": {
+    "gtfs_realtime_version": {
+      "type": "string"
+    },
+    "incrementality": {
+      "type": "enum",
+      "values": {
+        "FULL_DATASET": 0,
+        "DIFFERENTIAL": 1
+      }
+    },
+    "timestamp": {
+      "type": "uint64"
+    },
+    "feed_version": {
+      "type": "string"
+    }
+  },
+  "entity_types": {
+    "vehicle": {
+      "trip": {
+        "trip_id": {
+          "type": "string"
+        },
+        "route_id": {
+          "type": "string"
+        },
+        "direction_id": {
+          "type": "uint32"
+        },
+        "start_time": {
+          "type": "string"
+        },
+        "start_date": {
+          "type": "string"
+        },
+        "schedule_relationship": {
+          "type": "enum",
+          "values": {
+            "SCHEDULED": 0,
+            "ADDED": 1,
+            "UNSCHEDULED": 2,
+            "CANCELED": 3,
+            "REPLACEMENT": 5,
+            "DUPLICATED": 6,
+            "DELETED": 7,
+            "NEW": 8
+          }
+        },
+        "modified_trip": {
+          "type": "message",
+          "message_type": "ModifiedTripSelector"
+        }
+      },
+      "vehicle": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "license_plate": {
+          "type": "string"
+        },
+        "wheelchair_accessible": {
+          "type": "enum",
+          "values": {
+            "NO_VALUE": 0,
+            "UNKNOWN": 1,
+            "WHEELCHAIR_ACCESSIBLE": 2,
+            "WHEELCHAIR_INACCESSIBLE": 3
+          }
+        }
+      },
+      "position": {
+        "latitude": {
+          "type": "float"
+        },
+        "longitude": {
+          "type": "float"
+        },
+        "bearing": {
+          "type": "float"
+        },
+        "odometer": {
+          "type": "double"
+        },
+        "speed": {
+          "type": "float"
+        }
+      },
+      "current_stop_sequence": {
+        "type": "uint32"
+      },
+      "stop_id": {
+        "type": "string"
+      },
+      "current_status": {
+        "type": "enum",
+        "values": {
+          "INCOMING_AT": 0,
+          "STOPPED_AT": 1,
+          "IN_TRANSIT_TO": 2
+        }
+      },
+      "timestamp": {
+        "type": "uint64"
+      },
+      "congestion_level": {
+        "type": "enum",
+        "values": {
+          "UNKNOWN_CONGESTION_LEVEL": 0,
+          "RUNNING_SMOOTHLY": 1,
+          "STOP_AND_GO": 2,
+          "CONGESTION": 3,
+          "SEVERE_CONGESTION": 4
+        }
+      },
+      "occupancy_status": {
+        "type": "enum",
+        "values": {
+          "EMPTY": 0,
+          "MANY_SEATS_AVAILABLE": 1,
+          "FEW_SEATS_AVAILABLE": 2,
+          "STANDING_ROOM_ONLY": 3,
+          "CRUSHED_STANDING_ROOM_ONLY": 4,
+          "FULL": 5,
+          "NOT_ACCEPTING_PASSENGERS": 6,
+          "NO_DATA_AVAILABLE": 7,
+          "NOT_BOARDABLE": 8
+        }
+      },
+      "occupancy_percentage": {
+        "type": "uint32"
+      },
+      "multi_carriage_details": {
+        "type": "repeated",
+        "items": {
+          "type": "message",
+          "message_type": "CarriageDetails"
+        }
+      }
+    }
+  }
+}

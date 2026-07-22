@@ -1,0 +1,21 @@
+{
+  "header": {
+    "gtfs_realtime_version": {
+      "type": "string"
+    },
+    "incrementality": {
+      "type": "enum",
+      "values": {
+        "FULL_DATASET": 0,
+        "DIFFERENTIAL": 1
+      }
+    },
+    "timestamp": {
+      "type": "uint64"
+    },
+    "feed_version": {
+      "type": "string"
+    }
+  },
+  "entity_types": {}
+}

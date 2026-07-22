@@ -1,0 +1,154 @@
+{
+  "header": {
+    "gtfs_realtime_version": {
+      "type": "string"
+    },
+    "incrementality": {
+      "type": "enum",
+      "values": {
+        "FULL_DATASET": 0,
+        "DIFFERENTIAL": 1
+      }
+    },
+    "timestamp": {
+      "type": "uint64"
+    },
+    "feed_version": {
+      "type": "string"
+    }
+  },
+  "entity_types": {
+    "trip_update": {
+      "trip": {
+        "trip_id": {
+          "type": "string"
+        },
+        "route_id": {
+          "type": "string"
+        },
+        "direction_id": {
+          "type": "uint32"
+        },
+        "start_time": {
+          "type": "string"
+        },
+        "start_date": {
+          "type": "string"
+        },
+        "schedule_relationship": {
+          "type": "enum",
+          "values": {
+            "SCHEDULED": 0,
+            "ADDED": 1,
+            "UNSCHEDULED": 2,
+            "CANCELED": 3,
+            "REPLACEMENT": 5,
+            "DUPLICATED": 6,
+            "DELETED": 7,
+            "NEW": 8
+          }
+        },
+        "modified_trip": {
+          "type": "message",
+          "message_type": "ModifiedTripSelector"
+        }
+      },
+      "vehicle": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "license_plate": {
+          "type": "string"
+        },
+        "wheelchair_accessible": {
+          "type": "enum",
+          "values": {
+            "NO_VALUE": 0,
+            "UNKNOWN": 1,
+            "WHEELCHAIR_ACCESSIBLE": 2,
+            "WHEELCHAIR_INACCESSIBLE": 3
+          }
+        }
+      },
+      "stop_time_update": {
+        "type": "repeated",
+        "items": {
+          "stop_sequence": {
+            "type": "uint32"
+          },
+          "stop_id": {
+            "type": "string"
+          },
+          "arrival": {
+            "delay": {
+              "type": "int32"
+            },
+            "time": {
+              "type": "int64"
+            },
+            "uncertainty": {
+              "type": "int32"
+            },
+            "scheduled_time": {
+              "type": "int64"
+            }
+          },
+          "departure": {
+            "delay": {
+              "type": "int32"
+            },
+            "time": {
+              "type": "int64"
+            },
+            "uncertainty": {
+              "type": "int32"
+            },
+            "scheduled_time": {
+              "type": "int64"
+            }
+          },
+          "departure_occupancy_status": {
+            "type": "enum",
+            "values": {
+              "EMPTY": 0,
+              "MANY_SEATS_AVAILABLE": 1,
+              "FEW_SEATS_AVAILABLE": 2,
+              "STANDING_ROOM_ONLY": 3,
+              "CRUSHED_STANDING_ROOM_ONLY": 4,
+              "FULL": 5,
+              "NOT_ACCEPTING_PASSENGERS": 6,
+              "NO_DATA_AVAILABLE": 7,
+              "NOT_BOARDABLE": 8
+            }
+          },
+          "schedule_relationship": {
+            "type": "enum",
+            "values": {
+              "SCHEDULED": 0,
+              "SKIPPED": 1,
+              "NO_DATA": 2,
+              "UNSCHEDULED": 3
+            }
+          },
+          "stop_time_properties": {
+            "type": "message",
+            "message_type": "StopTimeProperties"
+          }
+        }
+      },
+      "timestamp": {
+        "type": "uint64"
+      },
+      "delay": {
+        "type": "int32"
+      },
+      "trip_properties": {
+        "type": "message",
+        "message_type": "TripProperties"
+      }
+    }
+  }
+}

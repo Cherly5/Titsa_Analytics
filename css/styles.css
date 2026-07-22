@@ -1,0 +1,311 @@
+:root {
+    --surface-bg: rgba(15, 23, 42, 0.78);
+    --surface-border: rgba(148, 163, 184, 0.32);
+    --surface-hover: rgba(30, 41, 59, 0.75);
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --accent: #38bdf8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    color: var(--text-primary);
+}
+
+#map {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ui-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.glass-card {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.68));
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 14px 28px rgba(2, 6, 23, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+}
+
+/* --- SELECTOR DE VISTAS (Inferior Izquierdo) --- */
+.view-selector {
+    position: absolute;
+    bottom: 55px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+}
+
+.icon-btn img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.icon-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-btn.active {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+/* --- PANEL DE CONTROL (Filtros) --- */
+.control-panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: min(360px, calc(100vw - 32px));
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.panel-kicker {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7dd3fc;
+    margin-bottom: 4px;
+}
+
+.control-panel h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.ghost-btn {
+    background: rgba(56, 189, 248, 0.16);
+    color: #bae6fd;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 10px;
+    padding: 7px 11px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ghost-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: rgba(56, 189, 248, 0.5);
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.field-group > label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.control-input,
+.control-select {
+    width: 100%;
+    border: 1px solid rgba(148, 163, 184, 0.38);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.56);
+    color: var(--text-primary);
+    padding: 9px 11px;
+    font-size: 13px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.control-input::placeholder {
+    color: #94a3b8;
+}
+
+.control-select option {
+    color: #0f172a;
+}
+
+.control-input:focus,
+.control-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.speed-range {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.status-grid label.status-pill {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.status-pill.transito { background: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.2); }
+.status-pill.llegando { background: rgba(251, 191, 36, 0.2); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.2); }
+.status-pill.parada { background: rgba(59, 130, 246, 0.2); color: #3B82F6; border: 1px solid rgba(59, 130, 246, 0.2); }
+.status-pill.desconocido { background: rgba(148, 163, 184, 0.2); color: #94A3B8; border: 1px solid rgba(148, 163, 184, 0.2); }
+
+.status-grid label.status-pill:has(input:not(:checked)) {
+    background: rgba(15, 23, 42, 0.45);
+    color: #64748b;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.status-grid label.status-pill:has(input:not(:checked)):hover {
+    background: rgba(30, 41, 59, 0.75);
+}
+
+.status-pill input[type="checkbox"] {
+    accent-color: currentColor;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+/* --- PANELES DERECHOS (Estadísticas e Info) --- */
+.stats-panel {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    min-width: 280px;
+    padding: 14px 16px;
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-primary);
+}
+
+.stat-value.muted {
+    color: #93c5fd;
+}
+
+.stat-meta {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Estilos para el nuevo panel de información del vehículo */
+#bus-details-panel {
+    position: absolute;
+    right: 20px;
+    bottom: 140px;
+    width: 280px;
+    z-index: 1000;
+    padding: 14px 16px;
+}
+
+#bus-details-panel .panel-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+#bus-details-panel .ghost-btn {
+    padding: 2px 8px;
+    font-size: 18px;
+}
+
+#bus-details-content {
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+#bus-details-content p {
+    margin: 4px 0;
+}
+
+#bus-details-content strong {
+    color: var(--text-primary);
+}
+
+/* Componentes nativos de Mapbox */
+.mapboxgl-ctrl-group {
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+}

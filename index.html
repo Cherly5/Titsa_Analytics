@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Monitor de Guaguas en Tiempo Real</title>
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.5.0/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <nav class="view-selector glass-card">
+        <button id="btn-view-map" class="icon-btn active" title="Mapa en Vivo">
+            <img src="resources/map_icon.png" alt="Mapa">
+        </button>
+        <button id="btn-view-dash" class="icon-btn" title="Análisis Histórico">
+            <img src="resources/diagram_icon.png" alt="Análisis Histórico">
+        </button>
+    </nav>
+
+    <div id="view-map" style="width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;">
+        <div id="map"></div>
+        <div class="ui-overlay">
+            <aside class="control-panel glass-card">
+                <div class="panel-header">
+                    <div>
+                        <p class="panel-kicker">Centro de control</p>
+                    </div>
+                    <button id="reset-filters" type="button" class="ghost-btn">Restablecer</button>
+                </div>
+
+                <div class="field-group">
+                    <label for="filter-route-id">Filtrar por ruta</label>
+                    <select id="filter-route-id" class="control-select">
+                        <option value="">Todas las rutas</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label for="filter-bus-id">Filtrar por identificador de guagua</label>
+                    <input type="text" id="filter-bus-id" class="control-input" placeholder="Ej: BUS-1023">
+                </div>
+
+                <div class="field-group">
+                    <label>Filtrar por velocidad (km/h)</label>
+                    <div class="speed-range">
+                        <input type="number" id="filter-speed-min" class="control-input" min="0" step="1" placeholder="Mín">
+                        <input type="number" id="filter-speed-max" class="control-input" min="0" step="1" placeholder="Máx">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="filter-movimiento">Estado de movimiento</label>
+                    <select id="filter-movimiento" class="control-select">
+                        <option value="todos">Todos los vehículos</option>
+                        <option value="movimiento">Solo en movimiento (&gt;0 km/h)</option>
+                        <option value="parado">Solo detenidos (0 km/h)</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                <label>Estado operativo</label>
+                <div class="status-grid">
+                    <label class="status-pill transito"><input type="checkbox" id="filter-en_transito" checked> En tránsito</label>
+                    <!-- <label class="status-pill llegando"><input type="checkbox" id="filter-llegando" checked> Llegando</label> -->
+                    <label class="status-pill parada"><input type="checkbox" id="filter-en_parada" checked> En parada</label>
+                    <!-- <label class="status-pill desconocido"><input type="checkbox" id="filter-desconocido" checked> Desconocido</label> -->
+                </div>
+            </div>
+            </aside>
+
+            <div id="bus-details-panel" class="glass-card" style="display: none;">
+                <div class="panel-header">
+                    <h3>Información del Vehículo</h3>
+                    <button id="close-details" type="button" class="ghost-btn">&times;</button>
+                </div>
+                <div id="bus-details-content">
+                    </div>
+            </div>
+
+            <div class="stats-panel glass-card">
+                <div class="stat-row">
+                    <div>
+                        <span class="stat-label">Guaguas visibles</span>
+                        <strong id="bus-count" class="stat-value">0</strong>
+                    </div>
+                    <div>
+                        <span class="stat-label">Guaguas recibidas</span>
+                        <strong id="bus-total-count" class="stat-value muted">0</strong>
+                    </div>
+                </div>
+                <div class="stat-meta">
+                    Última actualización: <span id="last-update">--:--:--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-dash" style="display: none; width: 100vw; height: 100vh; background-color: #f4f6f9; position: absolute; top: 0; left: 0; padding-top: 70px; box-sizing: border-box;">
+        <iframe width="100%" height="100%" src="https://datastudio.google.com/embed/reporting/1ed4d77b-041d-4d21-b130-95f3074c906e/page/3PgtF" frameborder="0" style="border:0" allowfullscreen sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
+    </div>
+
+    <script src="control/busManager.js"></script>
+    <script src="control/websocket.js"></script>
+    <script src="control/filters.js"></script>
+    <script src="control/map.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnMap = document.getElementById('btn-view-map');
+            const btnDash = document.getElementById('btn-view-dash');
+            const viewMap = document.getElementById('view-map');
+            const viewDash = document.getElementById('view-dash');
+
+            btnMap.addEventListener('click', () => {
+                viewMap.style.display = 'block';
+                viewDash.style.display = 'none';
+                btnMap.classList.add('active');
+                btnDash.classList.remove('active');
+
+                // Forzar al mapa de Mapbox a recalcular su tamaño al volver a hacerse visible
+                window.dispatchEvent(new Event('resize'));
+            });
+
+            btnDash.addEventListener('click', () => {
+                viewMap.style.display = 'none';
+                viewDash.style.display = 'block';
+                btnDash.classList.add('active');
+                btnMap.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
